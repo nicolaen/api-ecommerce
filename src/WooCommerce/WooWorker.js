@@ -121,8 +121,15 @@ export default class WooWorker {
     }
   };
   static reviewsByProductId = async (id, version) => {
+    let endpoint = `products/${id}/reviews`;
+    let data = undefined;
+    if (!version || version.include('v3')) {
+      endpoint = 'products/reviews';
+      data = { product: id };
+    }
+
     try {
-      const response = await this._api.get(`products/${id}/reviews`, undefined, version);
+      const response = await this._api.get(endpoint, data, version);
       return response.json();
     } catch (err) {
       console.log(err);
